@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { Calendar, Globe, Instagram, LinkedinIcon, Plus, Users, Zap } from "lucide-react";
+import { Calendar, Globe, Plus, Users, Zap } from "lucide-react";
+import { Link } from "react-router-dom";
 
 
 export default function LadingPage(){
@@ -9,22 +10,23 @@ export default function LadingPage(){
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              {/* <Calendar className="h-8 w-8 text-blue-600 mr-3" /> */}
+              <Calendar className="h-8 w-8 text-blue-600 mr-3" />
               <h1 className="text-2xl font-bold text-gray-900">Agendou</h1>
             </div>
             <div className="flex space-x-4">
-              <button
-                // onClick={() => setCurrentView('login')}
+              <Link
+                to="/login"
+
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
               >
                 Entrar
-              </button>
-              <button
-                // onClick={() => setCurrentView('register')}
+              </Link>
+              <Link
+                to="/register"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
               >
                 Criar Conta
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -41,18 +43,20 @@ export default function LadingPage(){
               outros agendem horários com você de forma simples e intuitiva.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
+              <Link 
+                to="/register"
                 className="bg-blue-900 hover:bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold flex items-center justify-center"
               >
                 <Plus className="mr-2 h-5 w-5" />
                 Criar conta grátis
-              </Button>
-              <Button
+              </Link>
+              <Link 
+                to="/"
                 className="bg-white hover:bg-gray-50 text-gray-700 px-8 py-3 rounded-xl text-lg font-semibold border border-gray-300 flex items-center justify-center"
               >
                 <Globe className="mr-2  h-5 w-5" />
                 Ver demostração
-              </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -103,16 +107,47 @@ export default function LadingPage(){
 
       <footer className="bg-gray-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Calendar className="h-8 w-8 text-blue-400 mr-3"/>
-              <span className="text-xl font-bold">Agendou</span>
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-2 mb-4">
+                <Calendar className="h-8 w-8 text-primary-400" />
+                <span className="text-2xl font-bold">Agendou</span>
+              </div>
+              <p className="text-gray-400 mb-4">
+                A plataforma mais simples para gerenciar seus agendamentos online.
+              </p>
             </div>
-            <p className="text-gray-400">@ 2025 Agendou. Todos os direitos reservados.</p>
-            <div className="flex space-x-2">
-              <Instagram />
-              <LinkedinIcon />
+            
+            <div>
+              <h3 className="font-semibold mb-4">Produto</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="" className="hover:text-white transition-colors">Funcionalidades</Link></li>
+                <li><Link to="" className="hover:text-white transition-colors">Preços</Link></li>
+                <li><Link to="" className="hover:text-white transition-colors">Demonstração</Link></li>
+              </ul>
             </div>
+            
+            <div>
+              <h3 className="font-semibold mb-4">Suporte</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="" className="hover:text-white transition-colors">Central de Ajuda</Link></li>
+                <li><Link to="" className="hover:text-white transition-colors">Contato</Link></li>
+                <li><Link to="" className="hover:text-white transition-colors">Status</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h3 className="font-semibold mb-4">Legal</h3>
+              <ul className="space-y-2 text-gray-400">
+                <li><Link to="" className="hover:text-white transition-colors">Privacidade</Link></li>
+                <li><Link to="" className="hover:text-white transition-colors">Termos</Link></li>
+                <li><Link to="" className="hover:text-white transition-colors">Segurança</Link></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 Agendou. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
