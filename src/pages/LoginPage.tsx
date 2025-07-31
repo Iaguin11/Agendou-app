@@ -177,17 +177,17 @@ export default function LoginPage(){
             </div>
           </div>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                Não tem conta?{' '}
-                <Link 
-                to="/register"
-                className="text-blue-600 hover:text-blue-800 font-medium"
-                >
-                  Cadastre-se
-                </Link>
-              </p>
-            </div>
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
+              Não tem conta?{' '}
+              <Link 
+              to="/register"
+              className="text-blue-600 hover:text-blue-800 font-medium"
+              >
+                Cadastre-se
+              </Link>
+            </p>
+          </div>
           </motion.div>
           <motion.div
             className="text-center"
