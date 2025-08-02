@@ -25,24 +25,37 @@ export default function LadingPage() {
       <header className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
-            <div className="flex items-center">
+            
+            <motion.div 
+              className="flex items-center"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
               <Calendar className="h-8 w-8 text-blue-600 mr-3" />
               <h1 className="text-2xl font-bold text-gray-900">Agendou</h1>
-            </div>
-            <div className="flex space-x-4">
+            </motion.div>  
+            
+            
+            <motion.div
+              className="flex space-x-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <Link
                 to="/login"
                 className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
-              >
+                >
                 Entrar
               </Link>
               <Link
                 to="/register"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
-              >
+                >
                 Criar Conta
               </Link>
-            </div>
+            </motion.div>
           </div>
         </div>
       </header>
@@ -50,15 +63,30 @@ export default function LadingPage() {
       <section className="py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+            <motion.h2
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-8"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            > 
               Agende encontros com{" "}
               <span className="text-blue-600">facilidades</span>
-            </h2>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            </motion.h2>
+            <motion.p
+              className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
               Crie sua agenda personalizada, compartilhe seu link e deixe que os
-              outros agendem horários com você de forma simples e intuitiva.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              outros agendem horários com você de forma simples e intuitiva.       
+            </motion.p>
+            <motion.div
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+            >
               <Link
                 to="/register"
                 className="bg-blue-900 hover:bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold flex items-center justify-center"
@@ -73,7 +101,8 @@ export default function LadingPage() {
                 <Globe className="mr-2  h-5 w-5" />
                 Ver demostração
               </Link>
-            </div>
+            </motion.div>
+            
           </div>
         </div>
       </section>
