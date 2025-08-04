@@ -1,6 +1,7 @@
-import { Link} from 'react-router-dom'
+import { Link, useNavigate} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
-import { email, z } from 'zod'
+import { z } from 'zod'
+import { useAuth } from '@/contexts/AuthContext'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion } from 'framer-motion'
 import { Calendar, ChevronLeft, Eye, EyeOff, Lock, Mail } from 'lucide-react'
@@ -17,17 +18,28 @@ type LoginFormData = z.infer<typeof loginSchema>
 export default function LoginPage(){
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const {login} = useAuth()
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
-    formState: { errors}
+    formState: {errors}
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema)
   })
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log(data, showPassword)
+  const onSubmit = async (data: LoginFormData) => {
+    setIsLoading(true)
+    try {
+      await login(data.email, data.password)
+      toast.success('Login realizado com sucesso')
+      navigate('/dashboard')
+    }catch (error){
+      toast.error('Falha no login')
+    }finally {
+      setIsLoading(false)
+    }
     
   }
 
