@@ -1,11 +1,13 @@
 import { motion } from "framer-motion";
-import { Calendar, ChevronLeft, Eye, EyeOff, Lock, User } from "lucide-react";
+import { Calendar, ChevronLeft, Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { Link } from "react-router-dom";
-import { email, z } from "zod";
+import { z } from "zod";
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const registerSchema = z
   .object({
@@ -25,6 +27,8 @@ export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
+  const {register: registerUser} = useAuth()
+  const navigate = useNavigate()
 
   const {
     register,
@@ -33,6 +37,21 @@ export default function RegisterPage() {
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
   });
+
+  const onSubmit = async (data: RegisterFormData) => {
+    setIsLoading(true)
+    try {
+      await registerUser(data.name, data.email, data.password)
+      toast.success('Conta criada com sucesso')
+      navigate("/dashboard")
+    } catch (error) {
+      toast.error('erro ao criar conta')
+    } finally{
+      setIsLoading(false)
+    }
+  }
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
@@ -60,7 +79,7 @@ export default function RegisterPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
-          <form action="" className="space-y-6">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             <div>
               <label
                 htmlFor="name"
@@ -90,6 +109,29 @@ export default function RegisterPage() {
             </div>
 
             <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                E-mail
+              </label>
+              <div className="relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  {...register('email')}
+                  className={`input pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 
+                    focus:ring-blue-500 ${errors.email ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""}`}
+                  placeholder="seu@email.com"
+                />
+              </div>
+              {errors.email && (
+                <p className="mt-2 text-sm text-red-600">{errors.email.message}</p>
+              )}
+            </div>
+
+            <div>
               <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-2"
@@ -106,7 +148,7 @@ export default function RegisterPage() {
                   autoComplete="new-password"
                   {...register("password")}
                   className={`input pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
-                     focus:ring-blue-500 ${errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""}`}
+                     focus:ring-blue-500 ${errors.password ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""}`}
                   placeholder="Mínimo 6 caracteres"
                 />
                 <button
@@ -145,7 +187,7 @@ export default function RegisterPage() {
                   autoComplete="new-password"
                   {...register("confirmPassword")}
                   className={`input pl-10 w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2
-                     focus:ring-blue-500 ${errors.name ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""}`}
+                     focus:ring-blue-500 ${errors.confirmPassword ? "border-red-500 focus:border-red-500 focus:ring-red-500/20" : ""}`}
                   placeholder="Confirme sua senha"
                 />
                 <button
