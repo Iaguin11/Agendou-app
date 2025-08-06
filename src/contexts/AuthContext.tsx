@@ -25,8 +25,16 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({children}: AuthProviderProps){
-  const [user, setUser] = useState<User | null>(null)
-  const [token, setToken] = useState<string| null>(null)
+  // const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<User | null>({
+  id: '1',
+  name: 'Cristiano Ronaldo',
+  email: 'ronaldoCris@cruise.com',
+  avatar: '',
+  bio: 'Melhor jogador do mundo'
+})
+  // const [token, setToken] = useState<string| null>(null)
+  const [token, setToken] = useState<string | null>('fake-token-123')
   const [loading, setLoading] = useState(false)
 
   //simular login
@@ -35,7 +43,7 @@ export function AuthProvider({children}: AuthProviderProps){
     await new Promise((resolve) => setTimeout(resolve, 1000))
     setUser({
       id: '1',
-      name: 'Tom Cruise',
+      name: 'Cristiano Ronaldo',
       email,
     })
     setToken('fake-token-123')
