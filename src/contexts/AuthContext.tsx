@@ -28,7 +28,7 @@ export function AuthProvider({children}: AuthProviderProps){
   // const [user, setUser] = useState<User | null>(null)
   const [user, setUser] = useState<User | null>({
   id: '1',
-  name: 'Cristiano Ronaldo',
+  name: 'CristianoRonaldo',
   email: 'ronaldoCris@cruise.com',
   avatar: '',
   bio: 'Melhor jogador do mundo'
