@@ -1,5 +1,11 @@
+import { CopyButton } from "@/components/copy-button";
+import DashboardCard from "@/components/DashboardCard";
 import DashboardLayout from "@/components/DashboardLayout";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
+import { format } from "date-fns";
+import { ptBR } from "date-fns/locale";
+import { motion } from "framer-motion";
 import {
   AlertCircle,
   ArrowRight,
@@ -8,12 +14,11 @@ import {
   Clock,
   ExternalLink,
   TrendingUp,
+  User,
   Users,
 } from "lucide-react";
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { format } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import toast from "react-hot-toast";
 
 interface Stats {
   totalAppointments: number;
@@ -28,6 +33,17 @@ interface Stats {
   };
 }
 
+interface UpcomingAppointment {
+  id: string;
+  guestName: string;
+  guestEmail: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  duration: number;
+  notes?: string;
+}
+
 export default function Dashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState<Stats>({
@@ -35,6 +51,13 @@ export default function Dashboard() {
     confirmedAppointments: 0,
     completedAppointments: 0,
   });
+  const [upcomingAppointments, setUpcomingAppointments] = useState<
+    UpcomingAppointment[]
+  >([]);
+
+  const publicUrl = user?.name ? `${window.location.origin}/${user?.name}` : "";
+  console.log(`dados do publicUrl aqui: ${publicUrl}`);
+
   const startsCards = [
     {
       title: "Total de Agendamentos",
@@ -75,24 +98,6 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      {/* <div className="bg-white rounded-2xl shadow-sm p-6"> */}
-      {/* <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-semibold text-gray-900">Configurar Disponibilidade</h2>
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">Seu link:</span>
-              <div className="flex items-center space-x-2">
-                <code className="bg-gray-100 px-3 py-1 rounded-lg text-sm">
-                  agendou.com/{user?.name}
-                </code>
-                <button 
-                  // onClick={() => copyToClipboard(`https://agendou.com/${user?.username}`)}
-                  className="text-blue-600 hover:text-blue-800 text-sm p-1"
-                >
-                  <Copy className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </div> */}
       <div className="space-y-8">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -106,10 +111,10 @@ export default function Dashboard() {
 
           <div className="mt-4 sm:mt-0">
             <a
-              // href={publicUrl}
+              href={publicUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary inline-flex items-center space-x-2"
+              className=" inline-flex items-center space-x-2"
             >
               <ExternalLink className="h-4 w-4" />
               <span>Ver página pública</span>
@@ -151,7 +156,7 @@ export default function Dashboard() {
             transition={{ duration: 0.6, delay: 0.4 }}
           >
             <div className="card">
-              <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center justify-center gap-3 mb-6">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Próximo Agendamento
                 </h3>
@@ -180,26 +185,154 @@ export default function Dashboard() {
                       </div>
                       <div className="flex-shrink-0">
                         <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+                        
                       </div>
                     </div>
                   </div>
-                  <a href="/dashboard" className="btn-outline w-full flex items-center justify-center space-x-2">
+                  <a
+                    href="/dashboard"
+                    className="btn-outline w-full flex items-center justify-center space-x-2"
+                  >
                     <span>Ver todos</span>
-                    <ArrowRight className="h-4 w-4"/>
+                    <ArrowRight className="h-4 w-4" />
                   </a>
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <AlertCircle className="h-12 w-12 text-gray-300 mx-auto mb-4"/>
+                  <AlertCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
                   <p className="text-gray-500">Nenhum agendamento próximo</p>
                 </div>
               )}
             </div>
           </motion.div>
-          
+
+          <motion.div
+            className="lg:col-span-2"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+          >
+            <div className="card">
+              <div className="flex item-center justify-center gap-3 mb-2">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Próximos Agendamentos
+                </h3>
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+
+              {upcomingAppointments.length > 0 ? (
+                <div className="space-y-4">
+                  {upcomingAppointments.map((appointment, index) => (
+                    <motion.div
+                      key={appointment.id}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl
+                        hover:bg-gray-100 transition-colors
+                      "
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div className="flex-shrink-0">
+                          <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
+                            <span className="text-primary-600 font-medium text-sm">
+                              {appointment.guestName.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">
+                            {appointment.guestName}
+                          </p>
+                          <p className="text-sm text-gray-">
+                            {appointment.guestEmail}
+                          </p>
+                          {appointment.notes && (
+                            <p className="text-xs text-gray-400 truncate mt-1">
+                              {appointment.notes}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex-shrink-0 text-right">
+                        <p className="text-sm font-medium text-gray-900">
+                          {format(new Date(appointment.date), "dd/MM", {
+                            locale: ptBR,
+                          })}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {appointment.startTime} - {appointment.endTime}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                  <a
+                    href="/dashboard/appointments"
+                    className="btn-outline w-full flex items-center justify-center space-x-2"
+                  >
+                    <span>Ver todos os agendamentos</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </a>
+                </div>
+              ) : (
+                <div className="text-center py-10">
+                  <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-4" />
+                  <p className="text-gray-500 mb-4">
+                    Nenhum agendamento próximo
+                  </p>
+                  <p className="text-sm text-gray-400 mb-6">
+                    Compartilhe seu link para começar a receber agendamentos
+                  </p>
+                  <div className="bg-gray-50 rounded-xl p-4 mb-8">
+                    <p className="text-sm text-gray-600 mb-2">
+                      Seu link público
+                    </p>
+                    <div className="flex justify-center items-center space-x-2">
+                      <code className="text-sm bg-white px-2 py-2 rounded border text-primary-600">
+                        {publicUrl}
+                      </code>
+                      <CopyButton textToCopy={publicUrl}/>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          </motion.div>
         </div>
+        <motion.div
+          className="grid md:grid-cols-3 gap-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+        >
+          <DashboardCard
+            href="/dashboard/availability"
+            bgColor="bg-blue"
+            icon={Clock}
+            iconColor="text-blue-600"
+            title="Configurar horário"
+            description="Definir disponibilidade"
+          />
+          <DashboardCard
+            href="/dashboard/appointments"
+            bgColor="bg-green"
+            icon={Calendar}
+            iconColor="text-green-600"
+            title="Ver agendamentos"
+            description="Gerenciar agenda"
+          />
+          <DashboardCard
+            href="/dashboard/settings"
+            bgColor="bg-purple"
+            icon={Users}
+            iconColor="text-purple-600"
+            title="Configurações"
+            description="Personalizar perfil"
+          />
+        </motion.div>
       </div>
-      {/* </div> */}
     </DashboardLayout>
   );
 }
