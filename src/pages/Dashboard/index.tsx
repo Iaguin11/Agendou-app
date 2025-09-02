@@ -16,6 +16,7 @@ import {
   TrendingUp,
   User,
   Users,
+  Share2,
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -56,244 +57,240 @@ export default function Dashboard() {
   >([]);
 
   const publicUrl = user?.name ? `${window.location.origin}/${user?.name}` : "";
-  console.log(`dados do publicUrl aqui: ${publicUrl}`);
+  
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(publicUrl);
+    toast.success("Link copiado para a área de transferência!");
+  };
 
-  const startsCards = [
+  const statsCards = [
     {
-      title: "Total de Agendamentos",
+      title: "Total",
       value: stats.totalAppointments,
       icon: Calendar,
-      color: "bg-blue-500",
+      color: "text-blue-600",
       bgColor: "bg-blue-50",
-      textColor: "text-blue-600",
     },
     {
-      title: "Agendamentos Confirmados",
+      title: "Confirmados", 
       value: stats.confirmedAppointments,
       icon: CheckCircle,
-      color: "bg-green-500",
+      color: "text-green-600",
       bgColor: "bg-green-50",
-      textColor: "text-green-600",
     },
     {
-      title: "Agendamentos Concluídos",
+      title: "Concluídos",
       value: stats.completedAppointments,
       icon: Users,
-      color: "bg-purple-500",
+      color: "text-purple-600", 
       bgColor: "bg-purple-50",
-      textColor: "text-purple-600",
     },
     {
-      title: "Taxa de Conclusão",
+      title: "Taxa",
       value:
         stats.totalAppointments > 0
           ? `${Math.round((stats.completedAppointments / stats.totalAppointments) * 100)}%`
           : "0%",
       icon: TrendingUp,
-      color: "bg-orange-500",
+      color: "text-orange-600",
       bgColor: "bg-orange-50",
-      textColor: "text-orange-600",
     },
   ];
 
   return (
     <DashboardLayout>
-      <div className="space-y-8">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div className="p-4 md:p-6 space-y-10 max-w-7xl mx-auto">
+        <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
               Olá, {user?.name?.split(" ")[0]}! 👋
             </h1>
-            <p className="mt-2 text-gray-600">
+            <p className="text-gray-600 mt-1">
               Aqui está um resumo da sua agenda
             </p>
           </div>
 
-          <div className="mt-4 sm:mt-0">
-            <a
-              href={publicUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className=" inline-flex items-center space-x-2"
+          <div className="flex items-center gap-3">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleCopyLink}
+              className="flex items-center gap-2"
             >
-              <ExternalLink className="h-4 w-4" />
-              <span>Ver página pública</span>
-            </a>
+              <Share2 className="h-4 w-4" />
+              <span className="hidden sm:inline">Compartilhar</span>
+            </Button>
+            
+            <Button
+              variant="ghost" 
+              size="sm"
+              asChild
+            >
+              <a
+                href={publicUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2"
+              >
+                <ExternalLink className="h-4 w-4" />
+                <span className="hidden sm:inline">Ver página</span>
+              </a>
+            </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {startsCards.map((stat, index) => (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {statsCards.map((stat, index) => (
             <motion.div
               key={stat.title}
-              className="card hover:shadow-xl transition-shadow"
+              className="bg-white p-4 rounded-xl border border-gray-100 hover:shadow-md transition-shadow"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
             >
-              <div className="flex items-center">
-                <div className={`p-3 rounded-xl ${stat.bgColor}`}>
-                  <stat.icon className={`h-6 w-6 ${stat.textColor}`} />
-                </div>
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-500">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs font-medium text-gray-500 mb-1">
                     {stat.title}
                   </p>
-                  <p className="text-2xl font-bold text-gray-50">
+                  <p className="text-lg md:text-xl font-bold text-gray-900">
                     {stat.value}
                   </p>
+                </div>
+                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                  <stat.icon className={`h-4 w-4 md:h-5 md:w-5 ${stat.color}`} />
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-5 gap-6">
           <motion.div
-            className="lg:col-span-1"
+            className="lg:col-span-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
-            <div className="card">
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <h3 className="text-lg font-semibold text-gray-900">
+            <div className="bg-white p-6 rounded-xl border border-gray-100">
+              <div className="flex items-center gap-2 mb-4">
+                <Clock className="h-5 w-5 text-gray-400" />
+                <h3 className="font-semibold text-gray-900">
                   Próximo Agendamento
                 </h3>
-                <Clock className="h-5 w-5 text-gray-400" />
               </div>
 
               {stats.nextAppointment ? (
                 <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 rounded-xl border border-blue-100">
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h4 className="font-medium text-gray-900">
-                          {stats.nextAppointment.guestName}
-                        </h4>
-                        <p className="text-sm text-gray-600 mt-1">
-                          {format(
-                            new Date(stats.nextAppointment.date),
-                            "dd 'de' MMMMM",
-                            { locale: ptBR }
-                          )}
-                        </p>
-                        <p className="text-sm font-medium text-blue-600 mt-2">
-                          {stats.nextAppointment.startTime} -{" "}
-                          {stats.nextAppointment.endTime}
-                        </p>
-                      </div>
-                      <div className="flex-shrink-0">
-                        <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                        
-                      </div>
-                    </div>
+                  <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border-l-4 border-blue-500">
+                    <h4 className="font-medium text-gray-900 mb-1">
+                      {stats.nextAppointment.guestName}
+                    </h4>
+                    <p className="text-sm text-gray-600 mb-2">
+                      {format(
+                        new Date(stats.nextAppointment.date),
+                        "dd 'de' MMMMM",
+                        { locale: ptBR }
+                      )}
+                    </p>
+                    <p className="text-sm font-medium text-blue-600">
+                      {stats.nextAppointment.startTime} - {stats.nextAppointment.endTime}
+                    </p>
                   </div>
-                  <a
-                    href="/dashboard"
-                    className="btn-outline w-full flex items-center justify-center space-x-2"
-                  >
-                    <span>Ver todos</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
+                  
+                  <Button variant="outline" size="sm" className="w-full" asChild>
+                    <a href="/dashboard/appointments" className="flex items-center justify-center gap-2">
+                      Ver todos
+                      <ArrowRight className="h-4 w-4" />
+                    </a>
+                  </Button>
                 </div>
               ) : (
-                <div className="text-center py-8">
-                  <AlertCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500">Nenhum agendamento próximo</p>
+                <div className="text-center py-6">
+                  <AlertCircle className="h-10 w-10 text-gray-300 mx-auto mb-3" />
+                  <p className="text-sm text-gray-500">Nenhum agendamento próximo</p>
                 </div>
               )}
             </div>
           </motion.div>
-
           <motion.div
-            className="lg:col-span-2"
+            className="lg:col-span-3"
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.4, delay: 0.3 }}
           >
-            <div className="card">
-              <div className="flex item-center justify-center gap-3 mb-2">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Próximos Agendamentos
-                </h3>
-                <User className="h-5 w-5 text-gray-400" />
+            <div className="bg-white p-6 rounded-xl border border-gray-100">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-gray-400" />
+                  <h3 className="font-semibold text-gray-900">
+                    Próximos Agendamentos
+                  </h3>
+                </div>
               </div>
 
               {upcomingAppointments.length > 0 ? (
-                <div className="space-y-4">
-                  {upcomingAppointments.map((appointment, index) => (
+                <div className="space-y-3">
+                  {upcomingAppointments.slice(0, 4).map((appointment, index) => (
                     <motion.div
                       key={appointment.id}
-                      className="flex items-center justify-between p-4 bg-gray-50 rounded-xl
-                        hover:bg-gray-100 transition-colors
-                      "
-                      initial={{ opacity: 0, y: 10 }}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                      initial={{ opacity: 0, y: 5 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.05 }}
+                      transition={{ duration: 0.2, delay: index * 0.05 }}
                     >
-                      <div className="flex items-center space-x-4">
-                        <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center">
-                            <span className="text-primary-600 font-medium text-sm">
-                              {appointment.guestName.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center">
+                          <span className="text-primary-600 font-medium text-xs">
+                            {appointment.guestName.charAt(0).toUpperCase()}
+                          </span>
                         </div>
-
-                        <div className="flex-1 min-w-0">
+                        
+                        <div className="min-w-0 flex-1">
                           <p className="text-sm font-medium text-gray-900 truncate">
                             {appointment.guestName}
                           </p>
-                          <p className="text-sm text-gray-">
+                          <p className="text-xs text-gray-500 truncate">
                             {appointment.guestEmail}
                           </p>
-                          {appointment.notes && (
-                            <p className="text-xs text-gray-400 truncate mt-1">
-                              {appointment.notes}
-                            </p>
-                          )}
                         </div>
                       </div>
 
-                      <div className="flex-shrink-0 text-right">
-                        <p className="text-sm font-medium text-gray-900">
-                          {format(new Date(appointment.date), "dd/MM", {
-                            locale: ptBR,
-                          })}
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-xs font-medium text-gray-900">
+                          {format(new Date(appointment.date), "dd/MM")}
                         </p>
                         <p className="text-xs text-gray-500">
-                          {appointment.startTime} - {appointment.endTime}
+                          {appointment.startTime}
                         </p>
                       </div>
                     </motion.div>
                   ))}
-                  <a
-                    href="/dashboard/appointments"
-                    className="btn-outline w-full flex items-center justify-center space-x-2"
-                  >
-                    <span>Ver todos os agendamentos</span>
-                    <ArrowRight className="h-4 w-4" />
-                  </a>
+                  
+                  {upcomingAppointments.length > 4 && (
+                    <Button variant="outline" size="sm" className="w-full mt-3" asChild>
+                      <a href="/dashboard/appointments" className="flex items-center justify-center gap-2">
+                        Ver todos ({upcomingAppointments.length})
+                        <ArrowRight className="h-4 w-4" />
+                      </a>
+                    </Button>
+                  )}
                 </div>
               ) : (
-                <div className="text-center py-10">
+                <div className="text-center py-8">
                   <Calendar className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-                  <p className="text-gray-500 mb-4">
-                    Nenhum agendamento próximo
-                  </p>
-                  <p className="text-sm text-gray-400 mb-6">
+                  <p className="text-gray-500 mb-2">Nenhum agendamento próximo</p>
+                  <p className="text-sm text-gray-400 mb-4">
                     Compartilhe seu link para começar a receber agendamentos
                   </p>
-                  <div className="bg-gray-50 rounded-xl p-4 mb-8">
-                    <p className="text-sm text-gray-600 mb-2">
-                      Seu link público
-                    </p>
-                    <div className="flex justify-center items-center space-x-2">
-                      <code className="text-sm bg-white px-2 py-2 rounded border text-primary-600">
+                  
+                  <div className="bg-gray-50 rounded-lg p-4 max-w-md mx-auto">
+                    <p className="text-xs text-gray-600 mb-2">Seu link público</p>
+                    <div className="flex items-center gap-2">
+                      <code className="text-xs bg-white px-3 py-2 rounded border text-primary-600 flex-1 truncate">
                         {publicUrl}
                       </code>
-                      <CopyButton textToCopy={publicUrl}/>
+                      <CopyButton textToCopy={publicUrl} />
                     </div>
                   </div>
                 </div>
@@ -301,18 +298,19 @@ export default function Dashboard() {
             </div>
           </motion.div>
         </div>
+
         <motion.div
-          className="grid md:grid-cols-3 gap-6"
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
+          transition={{ duration: 0.4, delay: 0.4 }}
         >
           <DashboardCard
             href="/dashboard/availability"
             bgColor="bg-blue"
             icon={Clock}
             iconColor="text-blue-600"
-            title="Configurar horário"
+            title="Horários"
             description="Definir disponibilidade"
           />
           <DashboardCard
@@ -320,8 +318,8 @@ export default function Dashboard() {
             bgColor="bg-green"
             icon={Calendar}
             iconColor="text-green-600"
-            title="Ver agendamentos"
-            description="Gerenciar agenda"
+            title="Agenda"
+            description="Gerenciar agendamentos"
           />
           <DashboardCard
             href="/dashboard/settings"
