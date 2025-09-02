@@ -5,6 +5,7 @@ import LadingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Dashboard from "./pages/Dashboard";
+// import PublicDemoPage from "./components/publicdemopage";
 
 
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
       <Route path="/dashboard" element={<Dashboard />}/>
       <Route path="/login" element={<LoginPage />}/>
       <Route path="/register" element={<RegisterPage />}/>
+      {/* <Route path="/public-demo" element={<PublicDemoPage />} /> */}
     </Routes>
   )
 }

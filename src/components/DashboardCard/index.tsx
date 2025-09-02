@@ -22,7 +22,7 @@ export default function DashboardCard({
       href={href}
       className="card hover:shadow-xl transition-all group cursor-pointer"
     >
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 p-1">
         <div
           className={`p-3 ${bgColor}-50 rounded-xl group-hover:${bgColor}-100 transition-colors`}
         >

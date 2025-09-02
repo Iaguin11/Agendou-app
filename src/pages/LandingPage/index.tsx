@@ -95,7 +95,7 @@ export default function LadingPage() {
                 Criar conta grátis
               </Link>
               <Link
-                to="/"
+                to="/public-demo"
                 className="bg-white hover:bg-gray-50 text-gray-700 px-8 py-3 rounded-xl text-lg font-semibold border border-gray-300 flex items-center justify-center"
               >
                 <Globe className="mr-2  h-5 w-5" />
