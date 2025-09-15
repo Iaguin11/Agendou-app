@@ -50,24 +50,6 @@ Uma aplicação full stack moderna para agendamento de horários, similar ao Cal
 - **React Router DOM** - Roteamento
 - **Lucide React** - Ícones modernos
 
-## 📁 Estrutura do Projeto
-
-```
-agendou/
-├── frontend/
-│   ├── src/
-│   │   ├── components/     # Componentes reutilizáveis
-│   │   ├── pages/         # Páginas da aplicação
-│   │   ├── contexts/      # Contextos React
-│   │   ├── services/      # Serviços de API
-│   │   ├── hooks/         # Hooks customizados (planejado)
-│   │   └── utils/         # Utilitários frontend
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.ts
-└── README.md
-```
-
 ## 🚀 Como Executar
 
 ### Pré-requisitos
@@ -159,9 +141,3 @@ Para envio de e-mails, configure um servidor SMTP. Para Gmail:
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-## 🙏 Agradecimentos
-
-- [Calendly](https://calendly.com) pela inspiração
-- [Shadcn/ui](https://ui.shadcn.com) pelos componentes base
-- [Lucide](https://lucide.dev) pelos ícones
-- [Framer Motion](https
